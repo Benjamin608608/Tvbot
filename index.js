@@ -105,7 +105,7 @@ async function sendStreamStartNotification(member, voiceChannel) {
         
         // 發送通知
         await notificationChannel.send({
-            content: '<@&阿直播呢> 有人開始直播了！',
+            content: '<@阿直播呢> 有人開始直播了！',
             embeds: [embed]
         });
         
