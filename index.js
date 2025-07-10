@@ -1,6 +1,6 @@
-const { Client, GatewayIntentBits, EmbedBuilder } = require(‘discord.js’);
 
-const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
+
+
 
 const client = new Client({
 intents: [
@@ -12,9 +12,7 @@ GatewayIntentBits.GuildVoiceStates
 });
 
 const streamingUsers = new Map();
-const COOLDOWN_TIME = 5 * 60 * 1000;
-const userCooldowns = new Map();
-
+const COOLDOWN_TIME = 
 function isOnCooldown(userId) {
 const lastNotified = userCooldowns.get(userId);
 if (!lastNotified) return false;
