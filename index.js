@@ -2,6 +2,7 @@ const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 
 // 環境變數設定
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
+const NOTIFICATION_CHANNEL_ID = process.env.NOTIFICATION_CHANNEL_ID;
 
 // 創建Discord客戶端
 const client = new Client({
@@ -36,18 +37,38 @@ function setCooldown(userId) {
 
 // 獲取通知頻道
 async function getNotificationChannel(guild) {
-    // 尋找一般頻道
+    // 如果有設定特定頻道，優先使用該頻道
+    if (NOTIFICATION_CHANNEL_ID) {
+        try {
+            const channel = await client.channels.fetch(NOTIFICATION_CHANNEL_ID);
+            if (channel && channel.isTextBased()) {
+                console.log(`使用指定的通知頻道: ${channel.name}`);
+                return channel;
+            }
+        } catch (error) {
+            console.error('無法找到指定的通知頻道:', error);
+        }
+    }
+    
+    // 否則自動尋找合適的頻道
     const channelNames = ['一般', 'general', '通知', 'notifications', '大廳', 'lobby'];
     
     for (const name of channelNames) {
         const channel = guild.channels.cache.find(ch => 
             ch.name.toLowerCase().includes(name.toLowerCase()) && ch.isTextBased()
         );
-        if (channel) return channel;
+        if (channel) {
+            console.log(`自動找到通知頻道: ${channel.name}`);
+            return channel;
+        }
     }
     
     // 如果都找不到，使用第一個文字頻道
-    return guild.channels.cache.find(channel => channel.isTextBased());
+    const fallbackChannel = guild.channels.cache.find(channel => channel.isTextBased());
+    if (fallbackChannel) {
+        console.log(`使用備用頻道: ${fallbackChannel.name}`);
+    }
+    return fallbackChannel;
 }
 
 // 發送直播開始通知
@@ -125,6 +146,12 @@ async function sendStreamEndNotification(member, voiceChannel) {
 client.once('ready', () => {
     console.log(`直播通知機器人已登入: ${client.user.tag}`);
     console.log('正在監聽語音頻道的直播活動...');
+    
+    if (NOTIFICATION_CHANNEL_ID) {
+        console.log(`設定的通知頻道ID: ${NOTIFICATION_CHANNEL_ID}`);
+    } else {
+        console.log('將自動尋找合適的通知頻道');
+    }
 });
 
 // 監聽語音狀態變化
