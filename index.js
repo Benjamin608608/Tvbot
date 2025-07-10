@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 // 環境變數設定
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 const NOTIFICATION_CHANNEL_ID = process.env.NOTIFICATION_CHANNEL_ID;
+const ROLE_NAME = '阿直播呢'; // 要通知的身分組名稱
 
 // 創建Discord客戶端
 const client = new Client({
@@ -104,7 +105,7 @@ async function sendStreamStartNotification(member, voiceChannel) {
         
         // 發送通知
         await notificationChannel.send({
-            content: '@everyone 有人開始直播了！',
+            content: '<@&阿直播呢> 有人開始直播了！',
             embeds: [embed]
         });
         
@@ -146,6 +147,7 @@ async function sendStreamEndNotification(member, voiceChannel) {
 client.once('ready', () => {
     console.log(`直播通知機器人已登入: ${client.user.tag}`);
     console.log('正在監聽語音頻道的直播活動...');
+    console.log(`通知身分組: ${ROLE_NAME}`);
     
     if (NOTIFICATION_CHANNEL_ID) {
         console.log(`設定的通知頻道ID: ${NOTIFICATION_CHANNEL_ID}`);
