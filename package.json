@@ -1,0 +1,29 @@
+{
+  "name": "stream-bot",
+  "version": "1.0.0",
+  "description": "Discord聖經機器人 - 查詢聖經經文",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "axios": "^1.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "bible",
+    "christian",
+    "scripture"
+  ],
+  "author": "你的名字",
+  "license": "MIT"
+}
